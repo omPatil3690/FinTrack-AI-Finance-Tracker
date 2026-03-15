@@ -7,13 +7,15 @@ export async function POST(request) {
       process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
     if (!apiKey) {
+      console.error("❌ No OpenAI API key found in environment variables");
       return NextResponse.json(
         { message: "AI advice is disabled. Set OPENAI_API_KEY to enable it." },
         { status: 503 },
       );
     }
-
+    console.log("✅ API key found, length:", apiKey.length);
     const { totalBudget, totalIncome, totalSpend } = await request.json();
+    console.log("📊 Data received:", { totalBudget, totalIncome, totalSpend });
 
     const userPrompt = `
 Based on the following financial data:
