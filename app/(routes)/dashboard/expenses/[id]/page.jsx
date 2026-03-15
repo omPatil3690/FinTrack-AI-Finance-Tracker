@@ -86,8 +86,8 @@ function ExpensesScreen({ params }) {
   };
 
   return (
-    <div className="p-10">
-      <h2 className="text-2xl font-bold gap-2 flex justify-between items-center">
+    <div className="p-10 bg-background text-foreground min-h-full">
+      <h2 className="text-2xl font-bold text-foreground gap-2 flex justify-between items-center">
         <span className="flex gap-2 items-center">
           <ArrowLeft onClick={() => route.back()} className="cursor-pointer" />
           My Expenses
@@ -131,7 +131,7 @@ function ExpensesScreen({ params }) {
           <BudgetItem budget={budgetInfo} />
         ) : (
           <div
-            className="h-[150px] w-full bg-slate-200 
+            className="h-[150px] w-full bg-muted 
             rounded-lg animate-pulse"
           ></div>
         )}

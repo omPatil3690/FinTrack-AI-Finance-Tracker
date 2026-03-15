@@ -14,7 +14,7 @@ function DashboardHeader() {
     alert('Notifications feature coming soon!');
   };
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+    <header className="bg-background border-b border-border px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         {/* Mobile menu button */}
         <Button variant="ghost" size="sm" className="md:hidden">
@@ -24,10 +24,10 @@ function DashboardHeader() {
         {/* Search bar */}
         <div className="hidden md:flex items-center space-x-4 flex-1 max-w-md">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
               placeholder="Search transactions, budgets..."
-              className="pl-10 bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+              className="pl-10 bg-muted/60 border-border focus:bg-card transition-colors"
             />
           </div>
         </div>
@@ -38,22 +38,22 @@ function DashboardHeader() {
           <Button 
             variant="ghost" 
             size="sm" 
-            className="relative hover:bg-gray-100 transition-colors"
+            className="relative hover:bg-muted transition-colors"
             onClick={handleNotificationClick}
           >
-            <Bell className="w-5 h-5 text-gray-600" />
+            <Bell className="w-5 h-5 text-muted-foreground" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs"></span>
           </Button>
 
           {/* User profile */}
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-sm opacity-75"></div>
+            <div className="absolute inset-0 bg-primary/30 rounded-full blur-sm opacity-75"></div>
             <div className="relative">
               <UserButton 
                 afterSignOutUrl="/"
                 appearance={{
                   elements: {
-                    avatarBox: "w-10 h-10 rounded-full border-2 border-white shadow-lg"
+                    avatarBox: "w-10 h-10 rounded-full border-2 border-card shadow-lg"
                   }
                 }}
               />

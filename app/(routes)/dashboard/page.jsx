@@ -66,6 +66,7 @@ function Dashboard() {
           ),
         })
         .from(Incomes)
+        .where(eq(Incomes.createdBy, user?.primaryEmailAddress?.emailAddress))
         .groupBy(Incomes.id); // Assuming you want to group by ID or any other relevant column
 
       setIncomeList(result);
@@ -96,12 +97,12 @@ function Dashboard() {
   };
 
   return (
-    <div className="p-8 bg-gradient-to-br from-blue-50/50 to-white min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       <div className="mb-8">
-        <h2 className="font-bold text-4xl text-gray-900 mb-2">
+        <h2 className="font-bold text-4xl text-foreground mb-2">
           Hi, {user?.fullName} 👋
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-muted-foreground text-lg">
           Here's what's happening with your money. Let's manage your expenses smartly.
         </p>
       </div>
@@ -122,9 +123,9 @@ function Dashboard() {
           />
         </div>
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200/50 p-6">
-            <h2 className="font-bold text-xl text-gray-900 mb-6 flex items-center">
-              <span className="w-2 h-6 bg-gradient-to-t from-blue-500 to-purple-600 rounded-full mr-3"></span>
+          <div className="bg-card rounded-2xl shadow-lg border border-border p-6">
+            <h2 className="font-bold text-xl text-foreground mb-6 flex items-center">
+              <span className="w-2 h-6 bg-primary rounded-full mr-3"></span>
               Latest Budgets
             </h2>
             <div className="space-y-4">
@@ -135,7 +136,7 @@ function Dashboard() {
                 : [1, 2, 3, 4].map((item, index) => (
                     <div
                       key={index}
-                      className="h-[180px] w-full bg-gradient-to-r from-gray-200 to-gray-100 rounded-xl animate-pulse"
+                      className="h-[180px] w-full bg-muted rounded-xl animate-pulse"
                     ></div>
                   ))}
             </div>

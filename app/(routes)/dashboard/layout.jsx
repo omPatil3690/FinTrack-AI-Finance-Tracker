@@ -32,17 +32,17 @@ function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background text-foreground">
       {/* Desktop Sidebar */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <SideNav />
       </div>
       
       {/* Main Content */}
-      <div className="flex flex-col flex-1 md:pl-64">
+      <div className="flex flex-col flex-1 md:pl-64 bg-background">
         <DashboardHeader />
         <main
-          className="flex-1 overflow-auto custom-scrollbar"
+          className="flex-1 overflow-auto custom-scrollbar bg-background text-foreground"
         >
           {children}
         </main>

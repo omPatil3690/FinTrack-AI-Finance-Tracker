@@ -36,10 +36,10 @@ function AddExpense({ budgetId, user, refreshData }) {
     setLoading(false);
   };
   return (
-    <div className="border p-5 rounded-2xl">
-      <h2 className="font-bold text-lg">Add Expense</h2>
+    <div className="border border-border p-5 rounded-2xl bg-card">
+      <h2 className="font-bold text-lg text-foreground">Add Expense</h2>
       <div className="mt-2">
-        <h2 className="text-black font-medium my-1">Expense Name</h2>
+        <h2 className="text-foreground font-medium my-1">Expense Name</h2>
         <Input
           placeholder="e.g. Bedroom Decor"
           value={name}
@@ -47,7 +47,7 @@ function AddExpense({ budgetId, user, refreshData }) {
         />
       </div>
       <div className="mt-2">
-        <h2 className="text-black font-medium my-1">Expense Amount</h2>
+        <h2 className="text-foreground font-medium my-1">Expense Amount</h2>
         <Input
           placeholder="e.g. 1000"
           value={amount}

@@ -45,16 +45,7 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            <Toaster 
-              position="top-right"
-              toastOptions={{
-                style: {
-                  background: 'white',
-                  border: '1px solid #e5e7eb',
-                  color: '#374151',
-                },
-              }}
-            />
+            <Toaster position="top-right" />
             {children}
           </ThemeProvider>
         </body>

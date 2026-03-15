@@ -6,6 +6,7 @@ import { desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { Incomes, Expenses } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import IncomeItem from "./IncomeItem";
+import { toast } from "sonner";
 
 function IncomeList() {
   const [incomelist, setIncomelist] = useState([]);
@@ -29,6 +30,18 @@ function IncomeList() {
     setIncomelist(result);
   };
 
+  const deleteIncome = async (income) => {
+    const result = await db
+      .delete(Incomes)
+      .where(eq(Incomes.id, income.id))
+      .returning();
+
+    if (result) {
+      toast("Income Deleted!");
+      getIncomelist();
+    }
+  };
+
   return (
     <div className="mt-7">
       <div
@@ -38,13 +51,12 @@ function IncomeList() {
         <CreateIncomes refreshData={() => getIncomelist()} />
         {incomelist?.length > 0
           ? incomelist.map((budget, index) => (
-              <IncomeItem budget={budget} key={index} />
+              <IncomeItem budget={budget} key={index} onDelete={deleteIncome} />
             ))
           : [1, 2, 3, 4, 5].map((item, index) => (
               <div
                 key={index}
-                className="w-full bg-slate-200 rounded-lg
-        h-[150px] animate-pulse"
+                className="w-full bg-muted rounded-lg h-[150px] animate-pulse"
               ></div>
             ))}
       </div>

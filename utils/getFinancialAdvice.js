@@ -5,14 +5,10 @@ const inFlightRequests = new Map();
 
 const getFinancialAdvice = async (totalBudget, totalIncome, totalSpend) => {
   console.log(totalBudget, totalIncome, totalSpend);
-  const cacheKey = `aiAdvice:${totalBudget}:${totalIncome}:${totalSpend}`;
-  if (typeof window !== "undefined" && window.sessionStorage) {
-    const cachedAdvice = window.sessionStorage.getItem(cacheKey);
-    if (cachedAdvice) return cachedAdvice;
-  }
+  const requestKey = `aiAdvice:${totalBudget}:${totalIncome}:${totalSpend}`;
 
-  if (inFlightRequests.has(cacheKey)) {
-    return inFlightRequests.get(cacheKey);
+  if (inFlightRequests.has(requestKey)) {
+    return inFlightRequests.get(requestKey);
   }
 
   const requestPromise = (async () => {
@@ -20,43 +16,42 @@ const getFinancialAdvice = async (totalBudget, totalIncome, totalSpend) => {
       const response = await fetch("/api/ai-advice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          totalBudget,
-          totalIncome,
-          totalSpend,
-        }),
+        body: JSON.stringify({ totalBudget, totalIncome, totalSpend }),
       });
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        return (
-          data?.message ||
-          "Sorry, I couldn't fetch the financial advice at this moment. Please try again later."
-        );
+        return {
+          advice:
+            data?.message ||
+            "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.",
+          remaining: data?.remaining ?? null,
+        };
       }
 
       const data = await response.json();
-      const advice = data?.advice?.trim();
-      if (advice) {
-        if (typeof window !== "undefined" && window.sessionStorage) {
-          window.sessionStorage.setItem(cacheKey, advice);
-        }
-        return advice;
-      }
-
-      return "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.";
+      return {
+        advice:
+          data?.advice ||
+          "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.",
+        remaining: data?.remaining ?? null,
+      };
     } catch (error) {
       console.error("Error fetching financial advice:", error);
-      return "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.";
+      return {
+        advice:
+          "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.",
+        remaining: null,
+      };
     }
   })();
 
-  inFlightRequests.set(cacheKey, requestPromise);
+  inFlightRequests.set(requestKey, requestPromise);
 
   try {
     return await requestPromise;
   } finally {
-    inFlightRequests.delete(cacheKey);
+    inFlightRequests.delete(requestKey);
   }
 };
 
