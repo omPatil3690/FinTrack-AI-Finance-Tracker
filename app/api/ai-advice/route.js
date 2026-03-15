@@ -1,22 +1,20 @@
-import OpenAI from "openai";
-import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-const ai = new GoogleGenAI({});
+import { NextResponse } from "next/server";
+
+const apiKey = process.env.GEMINI_API_KEY;
+const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+
 export async function POST(request) {
   try {
-    const apiKey =
-      process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-
     if (!apiKey) {
-      console.error("❌ No OpenAI API key found in environment variables");
+      console.error("No Gemini API key found in environment variables");
       return NextResponse.json(
-        { message: "AI advice is disabled. Set OPENAI_API_KEY to enable it." },
+        { message: "AI advice is disabled. Set GEMINI_API_KEY to enable it." },
         { status: 503 },
       );
     }
-    console.log("✅ API key found, length:", apiKey.length);
+
     const { totalBudget, totalIncome, totalSpend } = await request.json();
-    console.log("📊 Data received:", { totalBudget, totalIncome, totalSpend });
 
     const userPrompt = `
 Based on the following financial data:
@@ -26,20 +24,13 @@ Based on the following financial data:
 Provide detailed financial advice in 2 sentences to help the user manage their finances more effectively.
     `.trim();
 
-    // const client = new OpenAI({ apiKey });
-    // const chatCompletion = await client.chat.completions.create({
-    //   model: "gpt-3.5-turbo",
-    //   messages: [{ role: "user", content: userPrompt }],
-    // });
+    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: modelName,
       contents: userPrompt,
     });
-    console.log(response.text);
 
-    const advice =
-      chatCompletion?.choices?.[0]?.message?.content?.trim() ||
-      "No advice generated.";
+    const advice = response?.text?.trim() || "No advice generated.";
 
     return NextResponse.json({ advice });
   } catch (error) {
