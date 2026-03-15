@@ -9,7 +9,7 @@ export async function POST(request) {
     if (!apiKey) {
       return NextResponse.json(
         { message: "AI advice is disabled. Set OPENAI_API_KEY to enable it." },
-        { status: 503 }
+        { status: 503 },
       );
     }
 
@@ -25,7 +25,7 @@ Provide detailed financial advice in 2 sentences to help the user manage their f
 
     const client = new OpenAI({ apiKey });
     const chatCompletion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: userPrompt }],
     });
 
@@ -41,9 +41,6 @@ Provide detailed financial advice in 2 sentences to help the user manage their f
         ? "Sorry, I couldn't fetch the financial advice at this moment. Please try again later."
         : error?.message ||
           "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.";
-    return NextResponse.json(
-      { message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message }, { status: 500 });
   }
 }

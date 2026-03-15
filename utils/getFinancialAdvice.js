@@ -3,6 +3,12 @@
 
 const getFinancialAdvice = async (totalBudget, totalIncome, totalSpend) => {
   console.log(totalBudget, totalIncome, totalSpend);
+  const cacheKey = `aiAdvice:${totalBudget}:${totalIncome}:${totalSpend}`;
+  if (typeof window !== "undefined" && window.sessionStorage) {
+    const cachedAdvice = window.sessionStorage.getItem(cacheKey);
+    if (cachedAdvice) return cachedAdvice;
+  }
+
   try {
     const response = await fetch("/api/ai-advice", {
       method: "POST",
@@ -23,10 +29,15 @@ const getFinancialAdvice = async (totalBudget, totalIncome, totalSpend) => {
     }
 
     const data = await response.json();
-    return (
-      data?.advice ||
-      "Sorry, I couldn't fetch the financial advice at this moment. Please try again later."
-    );
+    const advice = data?.advice?.trim();
+    if (advice) {
+      if (typeof window !== "undefined" && window.sessionStorage) {
+        window.sessionStorage.setItem(cacheKey, advice);
+      }
+      return advice;
+    }
+
+    return "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.";
   } catch (error) {
     console.error("Error fetching financial advice:", error);
     return "Sorry, I couldn't fetch the financial advice at this moment. Please try again later.";
