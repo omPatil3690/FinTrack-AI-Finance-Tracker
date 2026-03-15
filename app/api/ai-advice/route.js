@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
-
+import { GoogleGenAI } from "@google/genai";
+const ai = new GoogleGenAI({});
 export async function POST(request) {
   try {
     const apiKey =
@@ -25,11 +26,16 @@ Based on the following financial data:
 Provide detailed financial advice in 2 sentences to help the user manage their finances more effectively.
     `.trim();
 
-    const client = new OpenAI({ apiKey });
-    const chatCompletion = await client.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: userPrompt }],
+    // const client = new OpenAI({ apiKey });
+    // const chatCompletion = await client.chat.completions.create({
+    //   model: "gpt-3.5-turbo",
+    //   messages: [{ role: "user", content: userPrompt }],
+    // });
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: userPrompt,
     });
+    console.log(response.text);
 
     const advice =
       chatCompletion?.choices?.[0]?.message?.content?.trim() ||
