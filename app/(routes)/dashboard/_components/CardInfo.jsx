@@ -26,6 +26,8 @@ function CardInfo({ budgetList, incomeList, budgetsLoaded = true, incomesLoaded 
   useEffect(() => {
     if (typeof window === "undefined" || !window.sessionStorage) return;
     const storedAdvice = window.sessionStorage.getItem(adviceStorageKey);
+    let hasStoredRemaining = false;
+
     if (storedAdvice) {
       try {
         const parsed = JSON.parse(storedAdvice);
@@ -35,15 +37,16 @@ function CardInfo({ budgetList, incomeList, budgetsLoaded = true, incomesLoaded 
         }
         if (typeof parsed?.remaining === "number") {
           setRemainingCalls(parsed.remaining);
+          hasStoredRemaining = true;
         }
       } catch (error) {
         setFinancialAdvice(storedAdvice);
         setAdviceRequested(true);
       }
     }
-  }, []);
 
-  useEffect(() => {
+    if (hasStoredRemaining) return;
+
     let isMounted = true;
     const loadRemaining = async () => {
       const remaining = await getFinancialAdviceRemaining();
