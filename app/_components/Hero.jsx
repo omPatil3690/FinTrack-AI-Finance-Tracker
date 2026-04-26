@@ -23,7 +23,7 @@ function Hero() {
             alt="hero"
             height={720}
             width={1400}
-            className="mx-auto rounded-2xl object-contain h-full"
+            className="mx-auto rounded-2xl object-contain w-full"
             // className="mx-auto rounded-2xl object-cover h-full object-left-top"
             draggable={false}
           />
